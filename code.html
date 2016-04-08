@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-hans">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <title>Test</title>
+  <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?autoload=true&amp;skin=sunburst&amp;lang=js" defer="defer"></script>
+</head>
+<body style="background-color: #333333">
+<pre class="prettyprint lang-js" style="border:0px solid #88c; margin-top: 50px;">
+/**
+* 题目一 :
+    1. 扩展 Array 方法 extProc，可以实现如下效果：
+    根据项目的倒数第二个字符进行排序，且去除重复的部分。
+    例：["kitty","puppy","swan","penguin","giraffe","penguin","swan","dolphin"].extProc() = ["swan","giraffe","dolphin","penguin","puppy","kitty"]
+
+  ps: 这里有一个问题，就是当字母相同比如“penguin”和“penguin”对比的时候，有两个选择，一个是不改变顺序，一个是改变顺序
+      根据题目结果来看应该是改变了顺序，因为没有更多的例子来确认这个规律，我这里就写的改变顺序
+
+*
+*/
+
+(function () {
+  Array.prototype.extProc = function (array) {
+    var n = [];
+    array.map(function (v) {
+      if (n.indexOf(v) === -1) {
+        n.push(v);
+        if (n.length > 1) {
+          for (var i = n.length - 1; i > 0;) {
+            var code = n[i - 1];
+            var lastCode = n[i];
+            if (code.substr(code.length - 2, 1) >= lastCode.substr(lastCode.length - 2, 1)) {
+              n[i - 1] = lastCode;
+              n[i] = code;
+              i--;
+            } else {
+              i = -1;
+            }
+          }
+        }
+      }
+    });
+    return n;
+  };
+  var oldArray = ["kitty", "puppy", "swan", "penguin", "giraffe", "penguin", "swan", "dolphin"];
+  var newArray = oldArray.extProc(oldArray);
+  console.log(JSON.stringify(oldArray));
+  console.log(JSON.stringify(newArray));
+})();
+
+// 运行结果
+=> ["kitty","puppy","swan","penguin","giraffe","penguin","swan","dolphin"]
+=> ["swan","giraffe","dolphin","penguin","puppy","kitty"]
+=> ["swan","giraffe","dolphin","penguin","puppy","kitty"] //例子
+
+</pre>
+
+<pre class="prettyprint lang-js" style="border:0px solid #88c; margin-top: 50px;">
+/**
+* 题目二 :
+    1. 请将阿拉伯浮点数字转换成中文数字：5234.123 => “五千二百三十四点一二三
+  ps: 考虑了整数的情况，多了几行代码
+*
+*/
+
+(function() {
+  var $ = ['点','十','百','千','万','百','千',''];
+  var $$ = ['零','一','二','三','四','五','六','七','八','九','十'];
+  function trim(number) {
+    var newNumber = '';
+    var integer,decimal;
+    if(number.indexOf('.') !== -1) {
+      integer = number.substr(0, number.indexOf('.'));
+      decimal = number.substr(number.indexOf('.')+1,number.length);
+      var array = integer.split('');
+      array.reverse();
+      array.map(function(value, key) {
+        newNumber = $$[value]+$[key]+newNumber;
+      });
+      array = decimal.split('');
+      array.map(function(value, key) {
+        newNumber += $$[key+1];
+      });
+    }else{
+      var array = number.split('');
+      array.reverse();
+      array.map(function(value, key) {
+        newNumber = $$[value]+$[key]+newNumber;
+      });
+      newNumber = newNumber.substr(0, newNumber.length-1);
+    }
+    return newNumber;
+  }
+  console.log(trim('5234.123'));
+})();
+
+// 运行结果
+=> run '5234.123'
+=> 五千二百三十四点一二三
+=> 五千二百三十四点一二三 //例子
+
+
+
+/**
+*
+  本来想在每个代码展示框下写个input实现以下代码所展示的效果的，
+  但现在时间太晚，又是周五，拖久了你们人事肯定下班了就会到下个周一去，就不写具体实现例子了，望谅解。
+  代码写的有一些急，肯定很多特殊的情况没考虑到，还有本来打算用es6写的，但写完又得用babel编，
+  感觉会有些班门弄斧就不写了，哈哈
+**/
+
+</pre>
+
+
+</body>
+</html>
